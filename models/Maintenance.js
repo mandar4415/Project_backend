@@ -1,26 +1,35 @@
-// models/Maintenance.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const maintenanceSchema = new mongoose.Schema({
+// Define the schema for the Maintenance model
+const maintenanceSchema = new mongoose.Schema(
+  {
     serviceType: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      trim: true, // Automatically trims whitespace
     },
     dateOfService: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     cost: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
+      min: [0, "Cost cannot be negative"], // Enforce non-negative cost
     },
     itemId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Item', // Assuming you have an Item model
-        required: true
-    }
-}, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Item", // Reference to the Item model
+      required: true,
+    },
+  },
+  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+);
 
-const Maintenance = mongoose.model('Maintenance', maintenanceSchema);
+// Add an index to itemId for better query performance
+maintenanceSchema.index({ itemId: 1 });
+
+// Create the model using the schema
+const Maintenance = mongoose.model("Maintenance", maintenanceSchema);
 
 module.exports = Maintenance;
