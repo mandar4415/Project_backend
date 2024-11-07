@@ -53,3 +53,25 @@ exports.getMaintenance = async (req, res) => {
         res.status(500).json({ message: 'Error retrieving maintenance records', error: error.message });
     }
 };
+
+exports.deleteMaintenance = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user._id; // The user ID from the JWT token (after authentication)
+
+    try {
+        // Find the maintenance record by ID and check if it belongs to the logged-in user
+        const maintenanceRecord = await Maintenance.findOne({ _id: id, userId });
+
+        if (!maintenanceRecord) {
+            return res.status(404).json({ message: 'Maintenance record not found or you are not authorized to delete it' });
+        }
+
+        // Delete the maintenance record
+        await maintenanceRecord.remove();
+
+        res.status(200).json({ message: 'Maintenance record deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting maintenance record', error: error.message });
+    }
+};
