@@ -1,6 +1,6 @@
 // routes/maintenanceRoutes.js
 const express = require('express');
-const { addMaintenance, getMaintenance } = require('../controllers/maintenanceController');
+const { addMaintenance, getMaintenance, deleteMaintenance} = require('../controllers/maintenanceController');
 const auth = require('../middleware/authenticate');
 
 const router = express.Router();
